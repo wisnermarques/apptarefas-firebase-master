@@ -16,6 +16,7 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   List<Tarefa> _tarefas = [];
   final TarefaViewmodel _viewModel = TarefaViewmodel(TarefaRepository());
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -34,6 +35,7 @@ class HomePageState extends State<HomePage> {
             DateTime dataB = DateTime.tryParse(b.dataInicio) ?? DateTime(2100);
             return dataA.compareTo(dataB);
           });
+        _isLoading = false;
       });
     }
   }
@@ -62,32 +64,6 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  Color _getStatusColor(String status) {
-    switch (status) {
-      case 'Em andamento':
-        return Colors.blue.shade100;
-      case 'Pendente':
-        return Colors.red.shade100;
-      case 'Concluída':
-        return Colors.green.shade100;
-      default:
-        return Colors.grey.shade300;
-    }
-  }
-
-  Color _getStatusTextColor(String status) {
-    switch (status) {
-      case 'Em andamento':
-        return Colors.blue;
-      case 'Pendente':
-        return Colors.red;
-      case 'Concluída':
-        return Colors.green;
-      default:
-        return Colors.black;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,98 +73,81 @@ class HomePageState extends State<HomePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: _tarefas.isEmpty
-            ? const Center(child: Text('Nenhuma tarefa disponível.'))
-            : ListView.builder(
-                itemCount: _tarefas.length,
-                itemBuilder: (context, index) {
-                  final tarefa = _tarefas[index];
-                  return Card(
-                    elevation: 5,
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            tarefa.nome,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: Colors.teal,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text('Descrição: ${tarefa.descricao}'),
-                          const SizedBox(height: 8),
-                          Row(
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : _tarefas.isEmpty
+                ? const Center(child: Text('Nenhuma tarefa disponível.'))
+                : ListView.builder(
+                    itemCount: _tarefas.length,
+                    itemBuilder: (context, index) {
+                      final tarefa = _tarefas[index];
+                      return Card(
+                        elevation: 5,
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(
-                                child: Text(
-                                  'Início: ${DateFormat('dd/MM/yyyy').format(DateTime.tryParse(tarefa.dataInicio) ?? DateTime(2100))}',
+                              Text(
+                                tarefa.nome,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  color: Colors.teal,
                                 ),
                               ),
-                              Expanded(
-                                child: Text(
-                                  'Fim: ${DateFormat('dd/MM/yyyy').format(DateTime.tryParse(tarefa.dataFim) ?? DateTime(2100))}',
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 4, horizontal: 8),
-                            decoration: BoxDecoration(
-                              color: _getStatusColor(tarefa.status),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              'Status: ${tarefa.status}',
-                              style: TextStyle(
-                                color: _getStatusTextColor(tarefa.status),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.edit,
-                                    color: Colors.orange),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          EditTarefaPage(tarefa: tarefa),
+                              const SizedBox(height: 8),
+                              Text('Descrição: ${tarefa.descricao}'),
+                              const SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'Início: ${DateFormat('dd/MM/yyyy').format(DateTime.tryParse(tarefa.dataInicio) ?? DateTime(2100))}',
                                     ),
-                                  ).then((wasUpdated) {
-                                    if (wasUpdated == true) {
-                                      _loadTarefas();
-                                    }
-                                  });
-                                },
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      'Fim: ${DateFormat('dd/MM/yyyy').format(DateTime.tryParse(tarefa.dataFim) ?? DateTime(2100))}',
+                                    ),
+                                  ),
+                                ],
                               ),
-                              IconButton(
-                                icon:
-                                    const Icon(Icons.delete, color: Colors.red),
-                                onPressed: () => _deleteTarefaComUndo(tarefa),
+                              const SizedBox(height: 8),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.edit, color: Colors.orange),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => EditTarefaPage(tarefa: tarefa),
+                                        ),
+                                      ).then((wasUpdated) {
+                                        if (wasUpdated == true) {
+                                          _loadTarefas();
+                                        }
+                                      });
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete, color: Colors.red),
+                                    onPressed: () => _deleteTarefaComUndo(tarefa),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
+                        ),
+                      );
+                    },
+                  ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
