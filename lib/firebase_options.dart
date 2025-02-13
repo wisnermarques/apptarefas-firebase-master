@@ -73,4 +73,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'apptarefa-91280.firebasestorage.app',
     measurementId: 'G-3WCJKDMESB',
   );
+
 }
