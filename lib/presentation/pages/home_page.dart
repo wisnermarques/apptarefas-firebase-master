@@ -85,7 +85,11 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gestão de Tarefas', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.tealAccent),),
+        title: const Text(
+          'Gestão de Tarefas',
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.tealAccent),
+        ),
         backgroundColor: Colors.teal,
         actions: [
           IconButton(
@@ -143,31 +147,34 @@ class HomePageState extends State<HomePage> {
                               ),
                               const SizedBox(height: 8),
                               Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 4, horizontal: 8),
-                            decoration: BoxDecoration(
-                              color: _getStatusColor(tarefa.status),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              'Status: ${tarefa.status}',
-                              style: TextStyle(
-                                color: _getStatusTextColor(tarefa.status),
-                                fontWeight: FontWeight.bold,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 4, horizontal: 8),
+                                decoration: BoxDecoration(
+                                  color: _getStatusColor(tarefa.status),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  'Status: ${tarefa.status}',
+                                  style: TextStyle(
+                                    color: _getStatusTextColor(tarefa.status),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
                               const SizedBox(height: 8),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   IconButton(
-                                    icon: const Icon(Icons.edit, color: Colors.orange),
+                                    tooltip: 'Editar tarefa',
+                                    icon: const Icon(Icons.edit,
+                                        color: Colors.orange),
                                     onPressed: () {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => EditTarefaPage(tarefa: tarefa),
+                                          builder: (context) =>
+                                              EditTarefaPage(tarefa: tarefa),
                                         ),
                                       ).then((wasUpdated) {
                                         if (wasUpdated == true && mounted) {
@@ -177,7 +184,9 @@ class HomePageState extends State<HomePage> {
                                     },
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.delete, color: Colors.red),
+                                    tooltip: 'Excluir tarefa',
+                                    icon: const Icon(Icons.delete,
+                                        color: Colors.red),
                                     onPressed: () {},
                                   ),
                                 ],
@@ -202,7 +211,11 @@ class HomePageState extends State<HomePage> {
         },
         backgroundColor: Colors.teal,
         tooltip: 'Adicionar Tarefa',
-        child: const Icon(Icons.add, size: 30),
+        child: const Icon(
+          Icons.add,
+          size: 30,
+          color: Colors.tealAccent,
+        ),
       ),
     );
   }

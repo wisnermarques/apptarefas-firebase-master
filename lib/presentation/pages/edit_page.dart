@@ -102,7 +102,13 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Editar Tarefa'), backgroundColor: Colors.teal),
+        title: const Text(
+          'Editar Tarefa',
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.tealAccent),
+        ),
+        backgroundColor: Colors.teal,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Card(
@@ -135,8 +141,11 @@ class _EditTarefaPageState extends State<EditTarefaPage> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20.0)),
                     ),
-                    icon: const Icon(Icons.save, size: 24),
-                    label: const Text('Salvar', style: TextStyle(fontSize: 18)),
+                    icon: const Icon(Icons.save, size: 24, color: Colors.tealAccent,),
+                    label: const Text(
+                      'Salvar',
+                      style: TextStyle(fontSize: 18, color: Colors.tealAccent),
+                    ),
                   ),
                 ],
               ),

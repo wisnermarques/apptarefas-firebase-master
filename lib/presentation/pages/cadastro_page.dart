@@ -93,7 +93,7 @@ class _CadastroTarefaState extends State<CadastroTarefa> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cadastro de Tarefas'),
+        title: const Text('Cadastro de Tarefas', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.tealAccent),),
         backgroundColor: Colors.teal,
       ),
       body: Padding(
@@ -219,10 +219,10 @@ class _CadastroTarefaState extends State<CadastroTarefa> {
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                         ),
-                        icon: const Icon(Icons.save, size: 24),
+                        icon: const Icon(Icons.save, size: 24, color: Colors.tealAccent,),
                         label: const Text(
                           'Salvar',
-                          style: TextStyle(fontSize: 18),
+                          style: TextStyle(fontSize: 18, color: Colors.tealAccent),
                         ),
                       ),
                     ],
